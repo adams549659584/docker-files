@@ -1,0 +1,48 @@
+version: "3"
+services:
+  portainer:
+    image: portainer/portainer:1.25.0
+    container_name: portainer
+    restart: unless-stopped
+    # 将日志大小限制为 1M，以防止硬盘空间不足
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    ports:
+      - "9000:9000"
+    # 加入指定网络
+    networks:
+      -  MyNetwork
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/data
+      - ./public:/public
+
+  # portainer-ce:
+  #   image: portainer/portainer-ce
+  #   container_name: portainer-ce
+  #   restart: unless-stopped
+  #   # 将日志大小限制为 1M，以防止硬盘空间不足
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 1m
+  #   ports:
+  #     # - "9000:9000"
+  #     - "9443:9443"
+  #   # 加入指定网络
+  #   networks:
+  #     -  MyNetwork
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - ./data:/data
+  #     # - ./public:/public
+
+networks:
+  MyNetwork:
+    external: true
+
+# sudo docker network create MyNetwork
+# sudo docker-compose build --no-cache
+# sudo docker-compose up -d 

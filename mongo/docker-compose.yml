@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+  mongodb:
+    # 镜像名称
+    image: mongo:latest
+    # 容器名称
+    container_name: mongodb
+    # 自启动
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      TZ: Asia/Shanghai
+    # 加入指定网络
+    networks:
+      - MyNetwork
+    # 以 Compose 配置文件为中心的相对路径作为数据卷挂载到容器。
+    # volumes:
+      # - ./custom:/etc/mongo
+      # - ./data:/data/db
+    ports:
+      - 27017:27017
+
+networks:
+  MyNetwork:
+    external: true
+# docker-compose build --no-cache
+# docker-compose up -d

@@ -1,0 +1,45 @@
+version: '3'
+services:
+  nginx:
+    # 镜像名称
+    image: adams549659584/nginx
+    # 容器名称
+    container_name: nginx
+    # 设定上下文根目录，然后以该目录为准指定 Dockerfile，赋值Dockerfile 中的 ARG 指令
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # 自启动
+    restart: unless-stopped
+    # 将日志大小限制为 1M，以防止硬盘空间不足
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    # 加入指定网络
+    networks:
+      - MyNetwork
+      # bridge-host:
+      #   ipv4_address: 192.168.124.110
+    ports:
+      - 80:80
+      - 443:443
+      # - 444:444
+    # 以 Compose 配置文件为中心的相对路径作为数据卷挂载到容器。
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      - ./conf.global:/etc/nginx/conf.global
+      - ./tcp.d:/etc/nginx/tcp.d
+      # - ./modules:/usr/lib/nginx/modules      
+      # - ./njs:/usr/lib/nginx/njs      
+      - ./ssl:/ssl
+      - ./html:/usr/share/nginx/html
+      - ./log:/var/log/nginx
+      - ./nginx.conf:/etc/nginx/nginx.conf
+
+networks:
+  MyNetwork:
+  # bridge-host:
+    external: true
+# docker-compose build --no-cache
+# docker-compose up -d

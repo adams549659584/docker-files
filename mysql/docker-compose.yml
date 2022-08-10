@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: unless-stopped
+    # 将日志大小限制为 1M，以防止硬盘空间不足
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    networks:
+      - MyNetwork
+    # 以 Compose 配置文件为中心的相对路径作为数据卷挂载到容器。
+    volumes:
+    - ./data:/var/lib/mysql
+    # - ./conf:/etc/mysql/conf.d
+    ports:
+      - '3306:3306'
+      - '33060:33060'
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+
+networks:
+  MyNetwork:
+    external: true
+# docker-compose build --no-cache
+# docker-compose up -d
+
+# 用户名 root
+# 密码 123456

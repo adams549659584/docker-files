@@ -1,0 +1,4 @@
+mariadb/data
+mysql/data
+redis/data
+xray/db

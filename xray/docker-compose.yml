@@ -1,0 +1,35 @@
+version: '3'
+services:
+  xray:
+    # 镜像名称
+    image: adams549659584/x-ui:latest
+    # 容器名称
+    container_name: xray
+    # 自启动
+    restart: unless-stopped
+    # 将日志大小限制为 1M，以防止硬盘空间不足
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    # 设定上下文根目录，然后以该目录为准指定 Dockerfile，赋值Dockerfile 中的 ARG 指令
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    # privileged: true
+    # 加入指定网络
+    networks:
+      - MyNetwork
+    ports:
+      - 54321:54321
+      - 9009:9099
+      - 54380:80
+      - 54443:443
+    volumes:
+      - ./db:/etc/x-ui
+
+networks:
+  MyNetwork:
+    external: true
+# docker-compose build --no-cache
+# docker-compose up -d

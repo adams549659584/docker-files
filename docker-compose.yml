@@ -1,0 +1,180 @@
+version: '3'
+services:
+  portainer:
+    image: portainer/portainer:1.25.0
+    container_name: portainer
+    restart: unless-stopped
+    # 将日志大小限制为 1M，以防止硬盘空间不足
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    ports:
+      - "9000:9000"
+    # 加入指定网络
+    networks:
+      -  MyNetwork
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer/data:/data
+      - ./portainer/public:/public
+
+  v2ray:
+    image: v2fly/v2fly-core:latest
+    container_name: v2ray
+    restart: unless-stopped
+    # 将日志大小限制为 1M，以防止硬盘空间不足
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    ports:
+      - 9001:9001
+    # 加入指定网络
+    networks:
+      -  MyNetwork
+    volumes:
+      - ./v2ray/config:/etc/v2ray
+
+  # xray:
+  #   # 镜像名称
+  #   image: adams549659584/x-ui:latest
+  #   # 容器名称
+  #   container_name: x-ui
+  #   # 自启动
+  #   restart: unless-stopped
+  #   # 将日志大小限制为 1M，以防止硬盘空间不足
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 1m
+  #   # 加入指定网络
+  #   networks:
+  #     - MyNetwork
+  #   ports:
+  #     - 54321:54321
+  #     - 9009:9099
+  #     - 54380:80
+  #     - 54443:443
+  #   volumes:
+  #     - ./xray/db:/etc/x-ui    
+
+  # mariadb:
+  #   image: mariadb
+  #   container_name: mariadb
+  #   restart: unless-stopped
+  #   networks:
+  #     - MyNetwork
+  #   # 以 Compose 配置文件为中心的相对路径作为数据卷挂载到容器。
+  #   volumes:
+  #   - ./data:/var/lib/mysql
+  #   # - ./conf:/etc/mysql/conf.d
+  #   # - ./my.cnf:/etc/mysql/my.cnf
+  #   ports:
+  #     - '3307:3306'
+  #   environment:
+  #    TZ: Asia/Shanghai
+  #    MARIADB_ROOT_PASSWORD: '123456'
+
+  # mysql:
+  #   image: mysql
+  #   container_name: mysql
+  #   restart: unless-stopped
+  #   # 将日志大小限制为 1M，以防止硬盘空间不足
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 1m
+  #   networks:
+  #     - MyNetwork
+  #   # 以 Compose 配置文件为中心的相对路径作为数据卷挂载到容器。
+  #   volumes:
+  #   - ./mysql/data:/var/lib/mysql
+  #   # - ./conf:/etc/mysql/conf.d
+  #   ports:
+  #     - '3306:3306'
+  #     - '33060:33060'
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 123456     
+
+  # mongodb:
+  #   # 镜像名称
+  #   image: mongo:latest
+  #   # 容器名称
+  #   container_name: mongodb
+  #   # 自启动
+  #   restart: unless-stopped
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: 123456
+  #     TZ: Asia/Shanghai
+  #   # 加入指定网络
+  #   networks:
+  #     - MyNetwork
+  #   ports:
+  #     - 27017:27017  
+
+  # redis:
+  #   # 镜像名称
+  #   image: redis:latest
+  #   # 容器名称
+  #   container_name: redis
+  #   # 自启动
+  #   restart: unless-stopped
+  #   # 加入指定网络
+  #   networks:
+  #     - MyNetwork
+  #   # 以 Compose 配置文件为中心的相对路径作为数据卷挂载到容器。
+  #   volumes:
+  #     - ./redis/data:/data:rw
+  #     # - ./conf/redis.conf:/etc/redis/redis.conf
+  #   command: redis-server --requirepass 123456
+  #   ports:
+  #     - 6379:6379      
+
+  # nginx:
+  #   # 镜像名称
+  #   image: adams549659584/nginx
+  #   # 容器名称
+  #   container_name: nginx
+  #   # 设定上下文根目录，然后以该目录为准指定 Dockerfile，赋值Dockerfile 中的 ARG 指令
+  #   build:
+  #     context: ./nginx
+  #     dockerfile: Dockerfile
+  #   # 自启动
+  #   restart: unless-stopped
+  #   # 将日志大小限制为 1M，以防止硬盘空间不足
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 1m
+  #   # 加入指定网络
+  #   networks:
+  #     - MyNetwork
+  #     # bridge-host:
+  #     #   ipv4_address: 192.168.124.110
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   # 以 Compose 配置文件为中心的相对路径作为数据卷挂载到容器。
+  #   volumes:
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #     - ./nginx/conf.global:/etc/nginx/conf.global
+  #     - ./nginx/tcp.d:/etc/nginx/tcp.d
+  #     # - ./nginx/modules:/usr/lib/nginx/modules
+  #     # - ./nginx/njs:/usr/lib/nginx/njs
+  #     - ./nginx/ssl:/ssl
+  #     - ./nginx/html:/usr/share/nginx/html
+  #     - ./nginx/log:/var/log/nginx
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  #   depends_on:
+  #     - portainer
+  #     - v2ray
+
+networks:
+  MyNetwork:
+  # bridge-host:
+    external: true
+# docker-compose build --no-cache
+# docker-compose up -d
