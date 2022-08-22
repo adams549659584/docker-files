@@ -1,5 +1,13 @@
-# init
-```bash
+# 使用说明
+
+> 按需调整根目录的docker-compose.yml（注释的容器恢复即可）
+
+> 或进入单个项目文件夹内启动
+
+
+### oracle cloud 一把梭
+
+```sh
 # 1. 设置密码
 ROOT_PASSWD="你的root密码" && \
 echo -e "${ROOT_PASSWD}\n${ROOT_PASSWD}\n" | sudo passwd root && \
@@ -24,3 +32,5 @@ sudo sed -i "$ a net.core.default_qdisc=fq" /etc/sysctl.conf && \
 sudo sed -i "$ a net.ipv4.tcp_congestion_control=bbr" /etc/sysctl.conf && \
 sudo sysctl -p
 ```
+
+> 本站内容或服务用于个人学习、研究或欣赏，以及其他非商业性或非盈利性用途，但同时应遵守著作权法及其他相关法律的规定，通过使用本站内容或服务随之而来的风险与本人无关。
