@@ -37,7 +37,9 @@ const init = async () => {
       console.error(err);
       alert('读取配置错误');
     });
-  const currentPort = location.href.match(/(?<=-)\d+(?=\.)/)?.toString();
+  // iOS 不支持 零宽断言
+  // const currentPort = location.href.match(/(?<=-)\d+(?=\.)/)?.toString();
+  const currentPort = location.href.match(/-\d+\./)?.toString().replace('-','').replace('.','');
   const serverClient = config.inbounds[0].settings.clients[0];
   const serverStreamSetting = config.inbounds[0].streamSettings;
   const clientConfig = {
