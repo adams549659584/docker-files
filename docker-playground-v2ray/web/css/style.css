@@ -132,15 +132,6 @@ input {
   line-height: 80px;
 }
 
-#app .git-star {
-  position: fixed;
-  top: 65px;
-  left: 50%;
-  width: 130px;
-  height: 30px;
-  transform: translate(-50%);
-}
-
 #app .main {
   margin: 0 auto;
   min-height: 80vh;
@@ -153,6 +144,16 @@ input {
   padding: 42px 20px;
   border: 1px solid #c5c5c5;
   border-radius: 10px;
+  position: relative;
+}
+
+#app .git-star {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 130px;
+  height: 30px;
+  transform: translate(-50%,-50%);
 }
 
 #app .main .qrcode {
@@ -160,6 +161,7 @@ input {
   width: 256px;
   margin: 0 auto;
 }
+
 #app .main .vmess-link {
   display: none;
   cursor: pointer;
