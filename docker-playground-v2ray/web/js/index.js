@@ -1,3 +1,7 @@
+/**
+ * 生成二维码
+ * @param {string} text 需生成二维码的文本
+ */
 const initQRCode = (text = '') => {
   const qrcodeEle = document.querySelector('.qrcode');
   const qrcode = new QRCode(qrcodeEle, {
@@ -7,7 +11,12 @@ const initQRCode = (text = '') => {
   });
 };
 
-const copy = text => {
+/**
+ * 复制文本
+ * @param {string} text 要复制的文本内容
+ * @returns
+ */
+const copyText = text => {
   try {
     const ele = document.createElement('textarea');
     ele.value = text;
@@ -30,16 +39,44 @@ const copy = text => {
   return false;
 };
 
+/**
+ * 轻提示
+ * @param {string} message 消息文字
+ * @param {'success' | 'warning' | 'error' | 'loading'} type 消息类型
+ * @param {number} duration 显示时间，单位为毫秒
+ */
+const toast = (message, type = 'success', duration = 1000 * 3) => {
+  const toastEle = document.querySelector('.toast');
+  toastEle.className = `toast toast--${type}`;
+  const iconText = {
+    success: '√',
+    warning: '!',
+    error: '×',
+    loading: '~',
+  };
+  toastEle.querySelector('.toast__icon').innerHTML = iconText[type] || '';
+  toastEle.querySelector('.toast__content').innerHTML = message;
+  setTimeout(() => {
+    toastEle.className = `toast`;
+  }, duration);
+};
+
 const init = async () => {
+  toast('努力读取配置中 ~~~', 'loading');
   const config = await fetch('./config/config.json')
     .then(res => res.json())
     .catch(err => {
       console.error(err);
-      alert('读取配置错误');
+      toast('读取配置错误', 'error');
     });
+  toast('读取配置成功');
   // iOS 不支持 零宽断言
   // const currentPort = location.href.match(/(?<=-)\d+(?=\.)/)?.toString();
-  const currentPort = location.href.match(/-\d+\./)?.toString().replace('-','').replace('.','');
+  const currentPort = location.href
+    .match(/-\d+\./)
+    ?.toString()
+    .replace('-', '')
+    .replace('.', '');
   const serverClient = config.inbounds[0].settings.clients[0];
   const serverStreamSetting = config.inbounds[0].streamSettings;
   const clientConfig = {
@@ -51,9 +88,9 @@ const init = async () => {
     aid: serverClient.alterId,
     scy: 'auto',
     net: serverStreamSetting.network,
-    type: 'none',
-    host: '',
-    path: serverStreamSetting.wsSettings.path,
+    type: serverStreamSetting.header?.type || 'none',
+    host: serverStreamSetting.wsSettings.headers?.Host || '',
+    path: serverStreamSetting.wsSettings.path || '',
     tls: '',
     sni: '',
     alpn: '',
@@ -62,11 +99,11 @@ const init = async () => {
   const vmessLinkEle = document.querySelector('.vmess-link');
   vmessLinkEle.innerHTML = vmessLink;
   vmessLinkEle.onclick = function () {
-    const isCopied = copy(vmessLink);
+    const isCopied = copyText(vmessLink);
     if (isCopied) {
-      alert('已复制vmess链接');
+      toast('已复制vmess链接');
     } else {
-      alert('请手动选中后复制');
+      toast('请手动选中后复制', 'warning');
     }
   };
   initQRCode(vmessLink);

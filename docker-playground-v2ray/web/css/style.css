@@ -38,9 +38,8 @@ p {
 
 body {
   min-width: 320px;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-text-size-adjust: none;
   padding: 0;
   margin: 0;
@@ -133,8 +132,18 @@ input {
   line-height: 80px;
 }
 
+#app .git-star {
+  position: fixed;
+  top: 65px;
+  left: 50%;
+  width: 130px;
+  height: 30px;
+  transform: translate(-50%);
+}
+
 #app .main {
   margin: 0 auto;
+  min-height: 80vh;
 }
 
 #app .main .qrcode-bg {
@@ -162,7 +171,7 @@ input {
 }
 
 #app .footer {
-  padding: 0 20px;
+  padding: 0 20px 20px;
 }
 
 #app .footer .tips {
@@ -170,8 +179,69 @@ input {
   color: #ccc;
 }
 #app .footer .tips a {
-  color: #646cff;
+  color: #ccc;
 }
 #app .footer .tips a:visited {
-  color: #646cff;
+  color: #ccc;
+}
+
+.toast {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%);
+  padding: 12px 24px;
+  border-radius: 4px;
+  background-color: #282c34;
+  border-color: #282c34;
+  color: #909399;
+  display: none;
+}
+.toast--success {
+  display: flex;
+  color: #67c23a;
+}
+.toast--warning {
+  display: flex;
+  color: #e6a23c;
+}
+.toast--error {
+  display: flex;
+  color: #f56c6c;
+}
+.toast--loading {
+  display: flex;
+  color: #909399;
+}
+.toast__icon {
+  display: inline-block;
+  margin-right: 6px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+}
+.toast--success .toast__icon {
+  border: 1px solid #67c23a;
+}
+.toast--warning .toast__icon {
+  border: 1px solid #e6a23c;
+}
+.toast--error .toast__icon {
+  border: 1px solid #f56c6c;
+}
+.toast--loading .toast__icon {
+  border: 1px solid #909399;
+}
+.toast__content {
+  margin-left: 4px;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
