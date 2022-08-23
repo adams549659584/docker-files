@@ -147,6 +147,7 @@ input {
 }
 
 #app .main .qrcode-bg {
+  display: none;
   width: 300px;
   margin: 0 auto;
   padding: 42px 20px;
@@ -160,6 +161,7 @@ input {
   margin: 0 auto;
 }
 #app .main .vmess-link {
+  display: none;
   cursor: pointer;
   background-color: #282c34;
   color: #fff;
@@ -225,6 +227,7 @@ input {
   line-height: 20px;
   text-align: center;
   border-radius: 50%;
+  border: 1px solid #909399;
 }
 .toast--success .toast__icon {
   border: 1px solid #67c23a;

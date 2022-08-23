@@ -9,6 +9,11 @@ const initQRCode = (text = '') => {
     width: 256,
     height: 256,
   });
+  /**
+   * @type {HTMLDivElement}
+   */
+  const qrcodeBgEle = document.querySelector('.qrcode-bg');
+  qrcodeBgEle.style.cssText = 'display:block;';
 };
 
 /**
@@ -68,7 +73,11 @@ const init = async () => {
     .catch(err => {
       console.error(err);
       toast('读取配置错误', 'error');
+      return null;
     });
+  if (!config) {
+    return;
+  }
   toast('读取配置成功');
   // iOS 不支持 零宽断言
   // const currentPort = location.href.match(/(?<=-)\d+(?=\.)/)?.toString();
@@ -96,8 +105,12 @@ const init = async () => {
     alpn: '',
   };
   const vmessLink = `vmess://${window.btoa(JSON.stringify(clientConfig))}`;
+  /**
+   * @type {HTMLDivElement}
+   */
   const vmessLinkEle = document.querySelector('.vmess-link');
   vmessLinkEle.innerHTML = vmessLink;
+  vmessLinkEle.style.cssText = 'display:block;';
   vmessLinkEle.onclick = function () {
     const isCopied = copyText(vmessLink);
     if (isCopied) {
