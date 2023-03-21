@@ -19,22 +19,32 @@ services:
       - ./portainer/data:/data
       - ./portainer/public:/public
 
-  # v2ray:
-  #   image: v2fly/v2fly-core:latest
-  #   container_name: v2ray
-  #   restart: unless-stopped
-  #   # 将日志大小限制为 1M，以防止硬盘空间不足
-  #   logging:
-  #     driver: json-file
-  #     options:
-  #       max-size: 1m
-  #   ports:
-  #     - 9001:9001
-  #   # 加入指定网络
-  #   networks:
-  #     -  MyNetwork
-  #   volumes:
-  #     - ./v2ray/config:/etc/v2ray
+  v2ray:
+    image: v2ray:latest
+    container_name: v2ray
+    # 设定上下文根目录，然后以该目录为准指定 Dockerfile，赋值Dockerfile 中的 ARG 指令
+    build:
+      context: ./v2ray
+      args:
+        # linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64    
+        TARGETPLATFORM: linux/amd64
+        TAG: v5.4.0
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # 将日志大小限制为 1M，以防止硬盘空间不足
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    ports:
+      - 9001:9001
+    # 加入指定网络
+    networks:
+      -  MyNetwork
+    volumes:
+      - ./v2ray/config:/etc/v2fly
+      # - ./config:/etc/v2ray
+    command: run -c /etc/v2fly/config.json  
 
   # xray:
   #   # 镜像名称
